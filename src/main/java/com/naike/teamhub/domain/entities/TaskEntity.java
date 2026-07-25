@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -18,6 +19,9 @@ import java.util.UUID;
 @Setter
 @Builder
 public class TaskEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String title;
@@ -42,7 +46,7 @@ public class TaskEntity {
     private UserEntity assignee;
 
     @OneToMany(mappedBy = "task")
-    private ArrayList<CommentEntity> comments = new ArrayList<>();
+    private List<CommentEntity> comments = new ArrayList<>();
 
     @Column(nullable = false)
     private LocalDateTime startDate;

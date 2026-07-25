@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,13 +37,14 @@ public class UserEntity {
     private String department;
 
     @ManyToMany(mappedBy = "members")
-    private ArrayList<TeamEntity> teams = new ArrayList<>();
+    private List<TeamEntity> teams = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Enumerated(EnumType.STRING)
-    private UserStatus status;
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

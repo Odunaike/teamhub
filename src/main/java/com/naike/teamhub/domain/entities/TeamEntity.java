@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -35,10 +36,10 @@ public class TeamEntity {
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
-    private ArrayList<UserEntity> members = new ArrayList<>();
+    private List<UserEntity> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "team")
-    private ArrayList<ProjectEntity> projects = new ArrayList<>();
+    private List<ProjectEntity> projects = new ArrayList<>();
 
     @Column(nullable = false)
     private LocalDateTime createAt;

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class ProjectEntity {
     private TeamEntity team;
 
     @OneToMany(mappedBy = "project")
-    private ArrayList<TaskEntity> tasks = new ArrayList<>();
+    private List<TaskEntity> tasks = new ArrayList<>();
 
     @Column(nullable = false)
     private LocalDateTime startDate;
