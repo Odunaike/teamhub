@@ -26,7 +26,7 @@ public class TeamEntity {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_lead_id")
     private UserEntity teamLead;
 

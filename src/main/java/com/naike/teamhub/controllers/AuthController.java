@@ -2,17 +2,16 @@ package com.naike.teamhub.controllers;
 
 import com.naike.teamhub.domain.dtos.user.CreateUserDto;
 import com.naike.teamhub.domain.dtos.user.LoginDto;
+import com.naike.teamhub.domain.dtos.user.UserDto;
 import com.naike.teamhub.domain.entities.UserEntity;
 import com.naike.teamhub.domain.mapper.UserMapper;
-import com.naike.teamhub.domain.model.auth.CreateUserResponse;
+import com.naike.teamhub.domain.model.ApiResponse;
 import com.naike.teamhub.domain.model.auth.LoginResponse;
 import com.naike.teamhub.services.JwtService;
 import com.naike.teamhub.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,21 +26,8 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserMapper userMapper;
     private final JwtService jwtService;
 
-    @PostMapping("/create")
-    public ResponseEntity<CreateUserResponse> createUser(
-            @Valid @RequestBody CreateUserDto createUserDto
-    ){
-        UserEntity user = userMapper.toEntity(createUserDto);
-        UserEntity createdUser = authService.createUser(user);
-        CreateUserResponse signupResponse = CreateUserResponse.builder()
-                .mmessage("User created successfully")
-                .data(userMapper.toUserDto(createdUser))
-                .build();
-        return new ResponseEntity<>(signupResponse,HttpStatus.CREATED);
-    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(

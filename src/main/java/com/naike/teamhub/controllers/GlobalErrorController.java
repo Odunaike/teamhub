@@ -1,6 +1,7 @@
 package com.naike.teamhub.controllers;
 
-import com.naike.teamhub.domain.model.AppErrorResponse;
+import com.naike.teamhub.domain.exception.NoAuthenticationException;
+import com.naike.teamhub.domain.model.ApiErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,12 @@ import java.util.HashMap;
 public class GlobalErrorController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<AppErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+    public ResponseEntity<ApiErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
         HashMap<String,Object> map = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach( error ->{
             map.put(error.getField(), error.getDefaultMessage());
         });
-        AppErrorResponse apiErrorResponse = AppErrorResponse.builder()
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message("Invalid request body")
                 .details(map).build();
@@ -30,49 +31,58 @@ public class GlobalErrorController {
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<AppErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-        AppErrorResponse appErrorResponse = AppErrorResponse.builder()
+    public ResponseEntity<ApiErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
                 .build();
-        return new ResponseEntity<>(appErrorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<AppErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
-        AppErrorResponse appErrorResponse = AppErrorResponse.builder()
+    public ResponseEntity<ApiErrorResponse> handleExpiredJwtException(ExpiredJwtException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .message("expired token")
                 .build();
-        return new ResponseEntity<>(appErrorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NoAuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> handleNoAuthenticationException(BadCredentialsException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message("No Authentication Found")
+                .build();
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<AppErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
-        AppErrorResponse appErrorResponse = AppErrorResponse.builder()
+    public ResponseEntity<ApiErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message("Invalid email or password")
                 .build();
-        return new ResponseEntity<>(appErrorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<AppErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        AppErrorResponse appErrorResponse = AppErrorResponse.builder()
+    public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
                 .status(HttpStatus.CONFLICT.value())
                 .message(ex.getMessage())
                 .build();
-        return new ResponseEntity<>(appErrorResponse, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({Exception.class})
-    public ResponseEntity<AppErrorResponse> handleException(Exception ex){
+    public ResponseEntity<ApiErrorResponse> handleException(Exception ex){
         HashMap<String,Object> map = new HashMap<>();
         map.put("message", ex.getMessage());
-        AppErrorResponse appErrorResponse = AppErrorResponse.builder()
+        ApiErrorResponse apiErrorResponse = ApiErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message("Internal server error")
                 .details(map).build();
-        return new ResponseEntity<>(appErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(apiErrorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

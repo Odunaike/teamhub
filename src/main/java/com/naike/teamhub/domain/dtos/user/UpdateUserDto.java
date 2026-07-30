@@ -1,8 +1,6 @@
 package com.naike.teamhub.domain.dtos.user;
 
-import com.naike.teamhub.domain.entities.TeamEntity;
 import com.naike.teamhub.domain.enums.UserRole;
-import com.naike.teamhub.domain.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,15 +14,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
-    private UUID id;
+public class UpdateUserDto {
     private String firstName;
     private String lastName;
     private String email;
     private String jobTitle;
     private String department;
-    private UserRole role;
-    private UserStatus status;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AppErrorResponse {
+public class ApiErrorResponse {
     private int status;
     private String message;
     private HashMap<String, Object> details;
